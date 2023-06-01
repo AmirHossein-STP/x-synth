@@ -4,12 +4,11 @@ import numpy as np
 
 class AudioPlayer(object):
 
-    def __init__(self, timeline, board, IS_LOOPED = False, smplRate = 44100):
+    def __init__(self, timeline, board, smplRate = 44100):
         self.paud = pyaudio.PyAudio()
         self.position = 0
         self.timeline = timeline
         self.board = board
-        self.IS_LOOPED = IS_LOOPED
         self.smplRate = 44100
         self.stream = None
 
@@ -17,20 +16,20 @@ class AudioPlayer(object):
         def callback(in_data, frame_count, time_info, status):
             # If len(data) is less than requested frame_count, PyAudio automatically
             # assumes the stream is finished, and the stream stops.
-            if self.timeline.size >= (self.position + frame_count):
-                data = self.timeline[self.position:self.position+frame_count].copy()
-                if not self.IS_LOOPED:
-                    self.timeline[self.position:self.position+frame_count] = 0
+            if self.timeline.values.size >= (self.position + frame_count):
+                data = self.timeline.values[self.position:self.position+frame_count].copy()
+                if not self.timeline.IS_LOOPED:
+                    self.timeline.values[self.position:self.position+frame_count] = 0
                 self.position += frame_count
             else:
-                data = self.timeline[self.position:].copy()
-                if not self.IS_LOOPED:
-                    self.timeline[self.position:] = 0
+                data = self.timeline.values[self.position:].copy()
+                if not self.timeline.IS_LOOPED:
+                    self.timeline.values[self.position:] = 0
                 self.position += frame_count
-                self.position -= self.timeline.size
-                data = np.append(data, self.timeline[:self.position])
-                if not self.IS_LOOPED:
-                    self.timeline[:self.position] = 0
+                self.position -= self.timeline.values.size
+                data = np.append(data, self.timeline.values[:self.position])
+                if not self.timeline.IS_LOOPED:
+                    self.timeline.values[:self.position] = 0
                     
             data = self.board.process(data,self.smplRate,reset = False)
             return (data, pyaudio.paContinue)
