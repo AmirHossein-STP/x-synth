@@ -41,3 +41,37 @@ class KeyboardLayout:
             with open(file_address,'r') as file:
                 self.value = list(file.readlines()[0])
                 print(file_name + " loaded as keyboard layout successfully.")
+
+    def start(self, scaling, audioplayer, tonemaker, timeline):
+        # listen to keyboard
+        def on_press(key):
+            try:
+                fundamental = scaling(self.value.index(key.char))
+            except AttributeError:
+                # print('special key {0} pressed'.format(
+                #     key))
+                return
+            position = audioplayer.position
+            tone = tonemaker.make(fundamental)/10
+            timeline.add(tone, position)
+
+            
+        def on_release(key):
+            if key == keyboard.Key.esc:
+                # Stop listener
+                # audioplayer.stop()
+                print("stoped.")
+                return False
+
+        # Collect events until released
+        # with keyboard.Listener(
+        #         on_press=on_press,
+        #         on_release=on_release) as listener:
+        #     listener.join()
+
+        # ...or, in a non-blocking fashion:
+        listener = keyboard.Listener(
+            on_press=on_press,
+            on_release=on_release)
+        listener.start()
+        print("started...")

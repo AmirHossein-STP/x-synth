@@ -18,6 +18,15 @@ class Timeline:
     
     def clear(self):
         self.values = np.zeros(self.duration * self.smplRate, dtype = np.float32)
+    
+    def add(self, audio, position):
+        data_size = audio.size
+        if self.values.size >= (position + data_size):
+            self.values[position:position+data_size] += audio
+        else:
+            audio.size - self.values.size
+            self.values[position:] += audio[:self.values.size-position]
+            self.values[:position+audio.size-self.values.size] += audio[self.values.size-position:]
 
     def save(self, new_file_name = None):
         if new_file_name is None:
