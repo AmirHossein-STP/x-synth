@@ -1,9 +1,11 @@
 from os import path
 from pynput import keyboard
+from tone import ADSRTone
 
 class KeyboardLayout:
     def __init__(self):
         self.value = list()
+        self.tones = dict()
 
     def set():
         # reset keyboard layout
@@ -42,18 +44,27 @@ class KeyboardLayout:
                 self.value = list(file.readlines()[0])
                 print(file_name + " loaded as keyboard layout successfully.")
 
-    def start(self, scaling, audioplayer, tonemaker, timeline):
+    def start(self, scaling, harmonics, timeline):
         # listen to keyboard
         def on_press(key):
             try:
-                fundamental = scaling(self.value.index(key.char))
+                index = self.value.index(key.char)
+
+                tone = self.tones.get(index, None)
+                if tone is None:
+                    fundamental = scaling(index)
+                    tone = ADSRTone(fundamental, harmonics)
+                    timeline.add_tone(tone)
+                    self.tones[index]=tone
+
             except AttributeError:
+                pass
                 # print('special key {0} pressed'.format(
                 #     key))
-                return
-            position = audioplayer.position
-            tone = tonemaker.make(fundamental)/10
-            timeline.add(tone, position)
+                # return
+            # position = audioplayer.position
+            # tone = tonemaker.make(fundamental)/10
+            # timeline.add(tone, position)
 
             
         def on_release(key):
@@ -61,7 +72,20 @@ class KeyboardLayout:
                 # Stop listener
                 # audioplayer.stop()
                 print("stoped.")
+                timeline.tones = set()
+                self.tones = dict()
                 return False
+            try:
+                index = self.value.index(key.char)
+                tone = self.tones.get(index, None)
+                if tone is not None:
+                    timeline.remove_tone(tone)
+                    self.tones.pop(index)
+            except AttributeError:
+                pass
+                # print('special key {0} pressed'.format(
+                #     key))
+                # return
 
         # Collect events until released
         # with keyboard.Listener(

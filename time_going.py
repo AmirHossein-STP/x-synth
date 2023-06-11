@@ -6,6 +6,8 @@ class Timeline:
         self.IS_LOOPED = IS_LOOPED
         self.smplRate = smplRate
         self.duration = duration
+        self.tones = set()
+        self.position = 0
         
     @property
     def duration(self):
@@ -19,14 +21,26 @@ class Timeline:
     def clear(self):
         self.values = np.zeros(self.duration * self.smplRate, dtype = np.float32)
     
-    def add(self, audio, position):
+    def add(self, audio):
         data_size = audio.size
-        if self.values.size >= (position + data_size):
-            self.values[position:position+data_size] += audio
+        if self.values.size >= (self.position + data_size):
+            self.values[self.position:self.position+data_size] += audio
         else:
             audio.size - self.values.size
-            self.values[position:] += audio[:self.values.size-position]
-            self.values[:position+audio.size-self.values.size] += audio[self.values.size-position:]
+            self.values[self.position:] += audio[:self.values.size-self.position]
+            self.values[:self.position+audio.size-self.values.size] += audio[self.values.size-self.position:]
+    
+    def walk(self, count):
+        for tone in self.tones:
+            self.add(tone.make(frame_count = count))
+
+    def add_tone(self, tone):
+        self.tones.add(tone)
+    def remove_tone(self, tone):
+        self.add(tone.make(still_on = False))
+        self.tones.remove(tone)
+
+
 
     def save(self, new_file_name = None):
         if new_file_name is None:
