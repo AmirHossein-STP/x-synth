@@ -19,6 +19,7 @@ class Timeline:
         self.values = np.zeros(self._duration * self.smplRate, dtype = np.float32)
     
     def clear(self):
+        self.tones = set()
         self.values = np.zeros(self.duration * self.smplRate, dtype = np.float32)
     
     def add(self, audio):

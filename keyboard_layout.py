@@ -46,6 +46,7 @@ class KeyboardLayout:
 
     def start(self, scaling, harmonics, timeline):
         # listen to keyboard
+        self.harmonics = harmonics
         def on_press(key):
             try:
                 index = self.value.index(key.char)
@@ -53,7 +54,7 @@ class KeyboardLayout:
                 tone = self.tones.get(index, None)
                 if tone is None:
                     fundamental = scaling(index)
-                    tone = ADSRTone(fundamental, harmonics)
+                    tone = ADSRTone(fundamental, self.harmonics)
                     timeline.add_tone(tone)
                     self.tones[index]=tone
 

@@ -59,7 +59,7 @@ class ADSRTone:
         self.fade_in = np.linspace(0, 1, self.fade_size, dtype=np.float32)
         self.fade_out = np.linspace(1, 0, self.fade_size, dtype=np.float32)
 
-    def make(self, still_on = True, frame_count = 100, volume = 0.2):
+    def make(self, still_on = True, frame_count = 100, volume = 0.1):
         if not still_on:
             frame_count = self.fade_size
         w = 2*np.pi*self.fundamental
