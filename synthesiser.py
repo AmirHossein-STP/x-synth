@@ -43,15 +43,18 @@ def scaling_2(point):
 def scaling(point):
     return scaling_1(scaling_2(point))
 
-# keyboard_layout = KeyboardLayout()
-# keyboard_layout.load('complete left to right')
-# keyboard_layout.start(scaling_1, harmonics, timeline)
-
-
 notePlayer = NotePlayer(scaling_1, harmonics_maker, timeline)
 
-midsr = MidiSerial('/dev/cu.usbserial-00000000', notePlayer)
-midsr.start()
+
+keyboard_layout = KeyboardLayout(notePlayer)
+keyboard_layout.load('complete left to right')
+keyboard_layout.start()
+while keyboard_layout.is_on:
+    time.sleep(1)
+
+
+# midsr = MidiSerial('/dev/cu.usbserial-00000000', notePlayer)
+# midsr.start()
 
 time.sleep(1)
 audioplayer.stop()

@@ -1,6 +1,4 @@
 import serial
-from tone import ADSRTone
-import numpy as np
 
 class MidiSerial:
     def __init__(self, port, notePlayer):
@@ -12,6 +10,8 @@ class MidiSerial:
             while True:
                 s = ser.read()
                 if int.from_bytes(s, "big") == 0x90:
+                    # start midi command
+                    
                     note_byte = ser.read() 
                     vel_byte = ser.read() 
 
@@ -28,6 +28,8 @@ class MidiSerial:
                     self.notePlayer.startNote(index,vel)
 
                 elif int.from_bytes(s, "big") == 0x80:
+                    # stop midi command
+                    
                     note = ser.read() 
                     idk_yet_byte = ser.read() 
   

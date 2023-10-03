@@ -1,11 +1,11 @@
 from os import path
 from pynput import keyboard
-from tone import ADSRTone
-
+from threading import Timer
 class KeyboardLayout:
-    def __init__(self):
+    def __init__(self, notePlayer):
+        self. notePlayer = notePlayer
         self.value = list()
-        self.tones = dict()
+        self.is_on = False
 
     def set():
         # reset keyboard layout
@@ -44,28 +44,27 @@ class KeyboardLayout:
                 self.value = list(file.readlines()[0])
                 print(file_name + " loaded as keyboard layout successfully.")
 
-    def start(self, scaling, harmonics, timeline):
+    def start(self):
         # listen to keyboard
-        self.harmonics = harmonics
+        self.is_on = True
         def on_press(key):
             try:
                 index = self.value.index(key.char)
+                print("start ",index)
+                # self.notePlayer.startNote(index)
 
-                tone = self.tones.get(index, None)
-                if tone is None:
-                    fundamental = scaling(index)
-                    tone = ADSRTone(fundamental, self.harmonics)
-                    timeline.add_tone(tone)
-                    self.tones[index]=tone
-
+                self.notePlayer.single_hit(index)
+                def second_note():
+                    self.notePlayer.single_hit(index+7)
+                def third_note():
+                    self.notePlayer.single_hit(index+14)
+                t1 = Timer(0.3,second_note)
+                t1.start()
+                t2 = Timer(0.6,third_note)
+                t2.start()
+                
             except AttributeError:
                 pass
-                # print('special key {0} pressed'.format(
-                #     key))
-                # return
-            # position = audioplayer.position
-            # tone = tonemaker.make(fundamental)/10
-            # timeline.add(tone, position)
 
             
         def on_release(key):
@@ -73,20 +72,19 @@ class KeyboardLayout:
                 # Stop listener
                 # audioplayer.stop()
                 print("stoped.")
-                timeline.tones = set()
-                self.tones = dict()
+                self.is_on = False
+                # timeline.tones = set()
+                # self.tones = dict()
                 return False
             try:
                 index = self.value.index(key.char)
-                tone = self.tones.get(index, None)
-                if tone is not None:
-                    timeline.remove_tone(tone)
-                    self.tones.pop(index)
+                print("stop ",index)
+                # self.notePlayer.stopNote(index)
             except AttributeError:
                 pass
-                # print('special key {0} pressed'.format(
-                #     key))
-                # return
+            # print('special key {0} pressed'.format(
+            #     key))
+            # return
 
         # Collect events until released
         # with keyboard.Listener(

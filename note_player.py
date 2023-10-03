@@ -1,4 +1,4 @@
-from tone import ADSRTone
+from tone import ADSRTone, Tone
 
 class NotePlayer():
     def __init__(self, scaling, harmonic_maker, timeline):
@@ -24,3 +24,8 @@ class NotePlayer():
                 self.tones.pop(index)
         except AttributeError:
             pass
+    
+    def single_hit(self, index = 1, velocity = 1):
+        fundamental = self.scaling(index)
+        tone = Tone(self.harmonic_maker())
+        self.timeline.add(tone.make(fundamental)/10)
