@@ -37,7 +37,7 @@ class Tone:
 class ADSRTone:
     # make tone
 
-    def __init__(self, fundamental, harmonics, fade_duration = 0.002, initial_time = 0, smplRate = 44100):
+    def __init__(self, fundamental, harmonics, fade_duration = 0.002, initial_time = 0, smplRate = 44100, volume = 1):
         self.smplRate = smplRate
         self.timeStep =  2 * np.pi / self.smplRate
 
@@ -47,6 +47,7 @@ class ADSRTone:
 
         self.fade_duration = fade_duration
         self.harmonics = harmonics
+        self.tone_volume = volume
 
     @property
     def fade_duration(self):
@@ -81,5 +82,5 @@ class ADSRTone:
         
         # sound[-self.fade_size:] *= self.fade_out
         self.frame += frame_count
-        return sound*volume
+        return sound*volume*self.tone_volume
         # return sound/10
