@@ -48,15 +48,10 @@ def scaling(point):
 # keyboard_layout.start(scaling_1, harmonics, timeline)
 
 
-notePlayer_1 = NotePlayer(scaling_1, harmonics_maker, timeline)
-notePlayer_1.startNote(10)
-time.sleep(1)
-notePlayer_1.stopNote(10)
-notePlayer_1.startNote(10)
-time.sleep(1)
-notePlayer_1.stopNote(10)
+notePlayer = NotePlayer(scaling_1, harmonics_maker, timeline)
+
+midsr = MidiSerial('/dev/cu.usbserial-00000000', notePlayer)
+midsr.start()
+
 time.sleep(1)
 audioplayer.stop()
-
-# midsr = MidiSerial('/dev/cu.usbserial-00000000')
-# midsr.start(scaling_1, harmonics_maker, timeline)
