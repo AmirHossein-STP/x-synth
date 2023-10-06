@@ -4,11 +4,11 @@ import numpy as np
 
 class AudioPlayer(object):
 
-    def __init__(self, timeline, board, smplRate = 44100):
+    def __init__(self, timeline, board):
         self.paud = pyaudio.PyAudio()
         self.timeline = timeline
         self.board = board
-        self.smplRate = 44100
+        self.smplRate = timeline.smplRate
         self.stream = None
 
     def callback_wrapper(self):

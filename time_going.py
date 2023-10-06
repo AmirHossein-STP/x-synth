@@ -2,7 +2,7 @@ import numpy as np
 from os import path
 
 class Timeline:
-    def __init__(self, duration = 2, IS_LOOPED = False, smplRate = 44100):
+    def __init__(self, smplRate, duration = 2, IS_LOOPED = False):
         self.IS_LOOPED = IS_LOOPED
         self.smplRate = smplRate
         self.duration = duration

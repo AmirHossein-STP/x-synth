@@ -11,7 +11,7 @@ class NotePlayer():
             tone = self.tones.get(index, None)
             if tone is None:
                 fundamental = self.scaling(index)
-                tone = ADSRTone(fundamental, self.harmonic_maker(),volume=velocity)
+                tone = ADSRTone(fundamental, self.harmonic_maker(),self.timeline.smplRate,volume=velocity)
                 self.timeline.add_tone(tone)
                 self.tones[index]=tone
         except AttributeError:
@@ -27,5 +27,5 @@ class NotePlayer():
     
     def single_hit(self, index = 1, velocity = 1):
         fundamental = self.scaling(index)
-        tone = Tone(self.harmonic_maker())
+        tone = Tone(self.harmonic_maker(),self.timeline.smplRate)
         self.timeline.add(tone.make(fundamental)/10)

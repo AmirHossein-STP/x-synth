@@ -3,7 +3,7 @@ import numpy as np
 class Tone:
     # make tone
 
-    def __init__(self, harmonics, duration = 0.2, fade_duration = 0.002, smplRate = 44100):
+    def __init__(self, harmonics, smplRate, duration = 0.2, fade_duration = 0.002):
         self.smplRate = smplRate
         t0 = .0
         t = np.array( range( int(t0*self.smplRate) , int((t0+duration)*self.smplRate) ) , dtype="float") / self.smplRate
@@ -37,7 +37,7 @@ class Tone:
 class ADSRTone:
     # make tone
 
-    def __init__(self, fundamental, harmonics, fade_duration = 0.002, initial_time = 0, smplRate = 44100, volume = 1):
+    def __init__(self, fundamental, harmonics, smplRate, fade_duration = 0.002, initial_time = 0, volume = 1):
         self.smplRate = smplRate
         self.timeStep =  2 * np.pi / self.smplRate
 

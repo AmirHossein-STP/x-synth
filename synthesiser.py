@@ -15,15 +15,15 @@ from note_player import NotePlayer
 import time
 
 
-smplRate = 44100
+smplRate = 96000
 
-timeline = Timeline(IS_LOOPED = False)
+timeline = Timeline(IS_LOOPED = False, smplRate = smplRate)
 
 board = Pedalboard([ Reverb(room_size=0.25)])
 audioplayer = AudioPlayer(timeline,board)
 audioplayer.start()
 
-e = 2
+e = 2.1
 def harmonics_maker():
     rng = np.random.default_rng()
     modifier = rng.random(18)>0.5
@@ -46,15 +46,15 @@ def scaling(point):
 notePlayer = NotePlayer(scaling_1, harmonics_maker, timeline)
 
 
-keyboard_layout = KeyboardLayout(notePlayer)
-keyboard_layout.load('complete left to right')
-keyboard_layout.start()
-while keyboard_layout.is_on:
-    time.sleep(1)
+# keyboard_layout = KeyboardLayout(notePlayer)
+# keyboard_layout.load('complete left to right')
+# keyboard_layout.start()
+# while keyboard_layout.is_on:
+#     time.sleep(1)
 
 
-# midsr = MidiSerial('/dev/cu.usbserial-00000000', notePlayer)
-# midsr.start()
+midsr = MidiSerial('/dev/cu.usbserial-00000000', notePlayer)
+midsr.start()
 
 time.sleep(1)
 audioplayer.stop()
