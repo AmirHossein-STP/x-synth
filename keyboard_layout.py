@@ -22,7 +22,7 @@ class KeyboardLayout:
         with keyboard.Listener(on_press=on_press) as listener:
             listener.join()
 
-        new_file_name = input('enter your new keyboar layout name')
+        new_file_name = input('enter your new keyboar layout name: ')
         if not new_file_name:
             print("didn't save.")
         else:
@@ -35,7 +35,7 @@ class KeyboardLayout:
     def load(self, file_name = None):
         # load saved keyboard layout
         if file_name is None:
-            file_name = input('enter your keyboar layout name')
+            file_name = input('enter your keyboar layout name: ')
         file_address = path.join('database/keyboard_layouts/' , file_name + '.txt')
         if not file_name:
             print("didn't load.")

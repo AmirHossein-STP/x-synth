@@ -45,7 +45,7 @@ class Timeline:
 
     def save(self, new_file_name = None):
         if new_file_name is None:
-            new_file_name = input('enter your new timeline name')
+            new_file_name = input('enter your new timeline name: ')
         if not new_file_name:
             print("didn't save.")
         else:
@@ -56,7 +56,7 @@ class Timeline:
 
     def load(self, file_name = None):
         if file_name is None:
-            file_name = input('enter your timeline name')
+            file_name = input('enter your timeline name: ')
         file_address = path.join('database/saved_sounds/' , file_name + '.npy')
         if not file_name:
             print("didn't load.")
