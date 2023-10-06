@@ -23,9 +23,9 @@ class MidiSerial:
                         break
 
                     vel = ((2**(vel/10)-1024)*(1-0.02)/1023.7+1)
-                    vel *= (30/((index+1)*(index+1)/25))
+                    # vel *= (30/((index+1)*(index+1)/25))
                     
-                    self.notePlayer.startNote(index,vel)
+                    self.notePlayer.startNote(index,vel*0.5)
 
                 elif int.from_bytes(s, "big") == 0x80:
                     # stop midi command
