@@ -1,5 +1,6 @@
 import numpy as np
 from os import path
+from scipy.io import wavfile
 
 class Timeline:
     def __init__(self, smplRate, duration = 2, IS_LOOPED = False):
@@ -43,16 +44,22 @@ class Timeline:
 
 
 
-    def save(self, new_file_name = None):
+    def save(self, new_file_name = None, is_wave = False):
         if new_file_name is None:
             new_file_name = input('enter your new timeline name: ')
         if not new_file_name:
             print("didn't save.")
         else:
-            file_address = path.join('database/saved_sounds/' , new_file_name + '.npy')
-            with open(file_address,'wb') as file:
-                np.save(file,self.values)
-                print(new_file_name + " saved as timeline successfully.")
+            if is_wave:
+                file_address = path.join('database/saved_sounds/' , new_file_name + '.wav')
+                wavfile.write(file_address, self.smplRate, self.values)
+            else:
+                file_address = path.join('database/saved_sounds/' , new_file_name + '.npy')
+                with open(file_address,'wb') as file:
+                    np.save(file,self.values)
+                    print(new_file_name + " saved as timeline successfully.")
+
+
 
     def load(self, file_name = None):
         if file_name is None:

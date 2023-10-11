@@ -15,9 +15,10 @@ from note_player import NotePlayer
 import time
 
 
-smplRate = 96000
+smplRate = 44100
 
-timeline = Timeline(IS_LOOPED = False, smplRate = smplRate)
+timeline = Timeline(IS_LOOPED = True, duration = 360, smplRate = smplRate)
+timeline.load('first e = 2.1')
 
 board = Pedalboard([ Reverb(room_size=0.25)])
 audioplayer = AudioPlayer(timeline,board)
@@ -30,7 +31,7 @@ def harmonics_maker():
     harmonics = np.array([(np.power(e,np.log2(i)),np.power(e,np.log2(i))) for i in range(2,20)])
     harmonics[:,0] = harmonics[:,0]+modifier*10000
     harmonics[:,1] = harmonics[:,1]+modifier*10000
-    return harmonics
+    return []
 
 def scaling_1(point):
     return 27.5 * np.power(e,point/12)
@@ -53,8 +54,9 @@ notePlayer = NotePlayer(scaling_1, harmonics_maker, timeline)
 #     time.sleep(1)
 
 
-midsr = MidiSerial('/dev/cu.usbserial-00000000', notePlayer)
-midsr.start()
+# midsr = MidiSerial('/dev/cu.usbserial-00000000', notePlayer)
+# midsr.start()
 
+timeline.save(is_wave=True)
 time.sleep(1)
 audioplayer.stop()
