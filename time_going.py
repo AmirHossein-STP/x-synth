@@ -33,7 +33,8 @@ class Timeline:
             self.values[:self.position+audio.size-self.values.size] += audio[self.values.size-self.position:]
     
     def walk(self, count):
-        for tone in self.tones:
+        tones = set(self.tones)
+        for tone in tones:
             self.add(tone.make(frame_count = count))
 
     def add_tone(self, tone):
